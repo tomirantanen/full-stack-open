@@ -76,7 +76,10 @@ const App = () => {
         })
         .catch(error => {
           console.error(error);
-          notify(`Could not add ${newName}`, "error");
+          notify(
+            `Could not add ${newName}. ${error.response.data.error}`,
+            "error"
+          );
         });
     }
     setNewName("");
