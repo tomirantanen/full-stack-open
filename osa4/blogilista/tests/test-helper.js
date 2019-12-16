@@ -52,4 +52,34 @@ const initialBlogs = [
   }
 ];
 
-module.exports = { initialBlogs };
+const singleBlog = {
+  title: "Blog title",
+  author: "Test Author",
+  url: "url here",
+  likes: 4
+};
+
+const blogWithoutLikes = {
+  title: "Blog title",
+  author: "Test Author",
+  url: "url here"
+};
+
+const blogWithoutTitleAndUrl = {
+  author: "Test Author"
+};
+
+const updatedBlogData = {
+  title: "React patterns",
+  author: "Michael Chan",
+  url: "https://reactpatterns.com/",
+  likes: 10
+};
+
+module.exports = {
+  initialBlogs,
+  singleBlog,
+  blogWithoutLikes,
+  blogWithoutTitleAndUrl,
+  updatedBlogData
+};
