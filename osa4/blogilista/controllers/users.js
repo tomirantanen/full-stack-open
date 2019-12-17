@@ -2,10 +2,29 @@ const usersRouter = require("express").Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-usersRouter.post("/", async (request, response, next) => {
+usersRouter.get("/", async (request, response, next) => {
   try {
-    const body = request.body;
+    const users = await User.find({});
+    response.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
 
+usersRouter.post("/", async (request, response, next) => {
+  const body = request.body;
+
+  if (body.password === undefined) {
+    return response
+      .status(400)
+      .json({ error: "Missing required field: password" });
+  } else if (body.password.length < 3) {
+    return response
+      .status(400)
+      .json({ error: "Password must be at least 3 characters long" });
+  }
+
+  try {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
@@ -18,7 +37,7 @@ usersRouter.post("/", async (request, response, next) => {
     const savedUser = await user.save();
     response.json(savedUser);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
