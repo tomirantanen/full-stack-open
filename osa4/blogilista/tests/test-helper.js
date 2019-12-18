@@ -1,4 +1,7 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../utils/config");
 
 const initialBlogs = [
   {
@@ -78,10 +81,30 @@ const updatedBlogData = {
   likes: 10
 };
 
+const testUser = {
+  username: "testuser",
+  name: "User for api tests",
+  password: "password"
+};
+
 const usersInDb = async () => {
   const users = await User.find({});
   return users.map(user => user.toJSON());
 };
+
+const saveInitialUser = async (password, username, name) => {
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(testUser.password, saltRounds);
+  const user = new User({
+    username: testUser.username,
+    name: testUser.name,
+    passwordHash
+  });
+  return user.save();
+};
+
+const generateToken = (username, id) =>
+  jwt.sign({ username, id }, config.JWT_SECRET);
 
 module.exports = {
   initialBlogs,
@@ -89,5 +112,8 @@ module.exports = {
   blogWithoutLikes,
   blogWithoutTitleAndUrl,
   updatedBlogData,
-  usersInDb
+  usersInDb,
+  testUser,
+  saveInitialUser,
+  generateToken
 };

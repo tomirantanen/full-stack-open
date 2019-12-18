@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/user");
 const helper = require("./test-helper");
 const app = require("../app");
@@ -106,4 +107,8 @@ describe("Creating a new user", () => {
       error: "Missing required field: password"
     });
   });
+});
+
+afterAll(() => {
+  mongoose.connection.close();
 });
