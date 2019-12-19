@@ -59,6 +59,10 @@ function App() {
     }
   };
 
+  const handleCreateBlog = blog => {
+    setBlogs(blogs.concat(blog));
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogappUser");
@@ -85,6 +89,8 @@ function App() {
           user={user}
           blogs={blogs}
           handleLogout={handleLogout}
+          handleCreateBlog={handleCreateBlog}
+          notify={notify}
         ></Body>
       </header>
     </div>

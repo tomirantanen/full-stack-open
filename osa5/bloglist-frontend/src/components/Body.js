@@ -10,7 +10,9 @@ const Body = ({
   handleLogin,
   user,
   blogs,
-  handleLogout
+  handleLogout,
+  handleCreateBlog,
+  notify
 }) =>
   !Boolean(user) ? (
     <LoginForm
@@ -21,7 +23,13 @@ const Body = ({
       handleLogin={handleLogin}
     ></LoginForm>
   ) : (
-    <BlogList user={user} blogs={blogs} handleLogout={handleLogout}></BlogList>
+    <BlogList
+      user={user}
+      blogs={blogs}
+      handleLogout={handleLogout}
+      handleCreateBlog={handleCreateBlog}
+      notify={notify}
+    ></BlogList>
   );
 
 export default Body;
