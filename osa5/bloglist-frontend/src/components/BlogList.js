@@ -3,7 +3,14 @@ import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
 
-const BlogList = ({ user, blogs, handleLogout, handleCreateBlog, notify }) => (
+const BlogList = ({
+  user,
+  blogs,
+  handleLogout,
+  handleCreateBlog,
+  handleUpdateBlog,
+  notify
+}) => (
   <>
     <h1>Blogs</h1>
     <p>
@@ -14,7 +21,12 @@ const BlogList = ({ user, blogs, handleLogout, handleCreateBlog, notify }) => (
       <BlogForm handleCreateBlog={handleCreateBlog} notify={notify}></BlogForm>
     </Togglable>
     {blogs.map(blog => (
-      <Blog key={blog.id} blog={blog}></Blog>
+      <Blog
+        key={blog.id}
+        blog={blog}
+        handleUpdateBlog={handleUpdateBlog}
+        notify={notify}
+      ></Blog>
     ))}
   </>
 );

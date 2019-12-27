@@ -23,12 +23,14 @@ function App() {
   useEffect(() => {
     blogService
       .getAll()
-      .then(blogs => setBlogs(blogs))
+      .then(blogs => setBlogs(blogs.sort(sortByLikes)))
       .catch(error => {
         console.log(error);
         notify("Could not load blogs", "error");
       });
   }, []);
+
+  const sortByLikes = (a, b) => b.likes - a.likes;
 
   /**
    * Display notification message
@@ -60,7 +62,16 @@ function App() {
   };
 
   const handleCreateBlog = blog => {
-    setBlogs(blogs.concat(blog));
+    setBlogs(blogs.concat(blog).sort(sortByLikes));
+  };
+
+  const handleUpdateBlog = updatedBlog => {
+    setBlogs(
+      blogs
+        .filter(blog => blog.id !== updatedBlog.id)
+        .concat(updatedBlog)
+        .sort(sortByLikes)
+    );
   };
 
   const handleLogout = () => {
@@ -90,6 +101,7 @@ function App() {
           blogs={blogs}
           handleLogout={handleLogout}
           handleCreateBlog={handleCreateBlog}
+          handleUpdateBlog={handleUpdateBlog}
           notify={notify}
         ></Body>
       </header>
