@@ -16,7 +16,7 @@ const Body = ({
   handleRemoveBlog,
   notify
 }) =>
-  !Boolean(user) ? (
+  !user ? (
     <LoginForm
       username={username}
       password={password}
