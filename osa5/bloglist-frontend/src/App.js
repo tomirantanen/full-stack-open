@@ -74,6 +74,10 @@ function App() {
     );
   };
 
+  const handleRemoveBlog = removedBlog => {
+    setBlogs(blogs.filter(blog => blog.id !== removedBlog.id));
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogappUser");
@@ -102,6 +106,7 @@ function App() {
           handleLogout={handleLogout}
           handleCreateBlog={handleCreateBlog}
           handleUpdateBlog={handleUpdateBlog}
+          handleRemoveBlog={handleRemoveBlog}
           notify={notify}
         ></Body>
       </header>

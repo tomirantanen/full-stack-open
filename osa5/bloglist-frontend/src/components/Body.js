@@ -13,6 +13,7 @@ const Body = ({
   handleLogout,
   handleCreateBlog,
   handleUpdateBlog,
+  handleRemoveBlog,
   notify
 }) =>
   !Boolean(user) ? (
@@ -30,6 +31,7 @@ const Body = ({
       handleLogout={handleLogout}
       handleCreateBlog={handleCreateBlog}
       handleUpdateBlog={handleUpdateBlog}
+      handleRemoveBlog={handleRemoveBlog}
       notify={notify}
     ></BlogList>
   );

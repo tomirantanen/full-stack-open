@@ -9,6 +9,7 @@ const BlogList = ({
   handleLogout,
   handleCreateBlog,
   handleUpdateBlog,
+  handleRemoveBlog,
   notify
 }) => (
   <>
@@ -25,7 +26,9 @@ const BlogList = ({
         key={blog.id}
         blog={blog}
         handleUpdateBlog={handleUpdateBlog}
+        handleRemoveBlog={handleRemoveBlog}
         notify={notify}
+        user={user}
       ></Blog>
     ))}
   </>

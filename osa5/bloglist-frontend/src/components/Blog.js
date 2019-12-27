@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, handleUpdateBlog, notify }) => {
+const Blog = ({ blog, handleUpdateBlog, handleRemoveBlog, notify, user }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const blogStyle = {
@@ -11,7 +11,7 @@ const Blog = ({ blog, handleUpdateBlog, notify }) => {
     borderWidth: 1,
     marginBottom: 5
   };
-
+  const isRemovable = blog.user.username === user.username;
   const toggleDetails = () => setShowDetails(!showDetails);
 
   const addLike = async () => {
@@ -22,6 +22,20 @@ const Blog = ({ blog, handleUpdateBlog, notify }) => {
     } catch (error) {
       console.error(error);
       notify(`Could not add like to blog ${blog.title}`, "error");
+    }
+  };
+
+  const removeBlog = async () => {
+    if (!window.confirm(`Remove blog ${blog.title}?`)) {
+      return;
+    }
+
+    try {
+      await blogService.remove(blog);
+      handleRemoveBlog(blog);
+    } catch (error) {
+      console.error(error);
+      notify("Could not remove blog", "error");
     }
   };
 
@@ -37,6 +51,7 @@ const Blog = ({ blog, handleUpdateBlog, notify }) => {
             {blog.likes} likes <button onClick={addLike}>like</button>
           </p>
           <p>Added by {blog.user.username}</p>
+          {isRemovable ? <button onClick={removeBlog}>remove</button> : null}
         </>
       ) : null}
     </div>
