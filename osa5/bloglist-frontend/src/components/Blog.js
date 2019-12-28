@@ -48,7 +48,7 @@ const Blog = ({ blog, handleUpdateBlog, handleRemoveBlog, notify, user }) => {
       {showDetails ? (
         <>
           <p>{blog.url}</p>
-          <p>
+          <p className="likes">
             {blog.likes} likes <button onClick={addLike}>like</button>
           </p>
           <p>Added by {blog.user.username}</p>
