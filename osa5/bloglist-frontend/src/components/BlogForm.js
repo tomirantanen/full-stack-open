@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import blogService from "../services/blogs";
 import PropTypes from "prop-types";
+import { useField } from "../hooks/index";
+import { omit } from "lodash";
 
 const BlogForm = ({ handleCreateBlog, notify }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-
-  const handleTitleChange = event => setTitle(event.target.value);
-  const handleAuthorChange = event => setAuthor(event.target.value);
-  const handleUrlChange = event => setUrl(event.target.value);
+  const title = useField("text");
+  const author = useField("text");
+  const url = useField("text");
 
   const handleFormSubmit = async event => {
     event.preventDefault();
-    const blog = { title, author, url };
+    const blog = {
+      title: title.value,
+      author: author.value,
+      url: url.value
+    };
     try {
       const createdBlog = await blogService.create(blog);
       handleCreateBlog(createdBlog);
@@ -30,30 +32,15 @@ const BlogForm = ({ handleCreateBlog, notify }) => {
       <form onSubmit={handleFormSubmit}>
         <div>
           title:
-          <input
-            type="text"
-            name="Title"
-            value={title}
-            onChange={handleTitleChange}
-          />
+          <input name="Title" {...omit(title, "reset")} />
         </div>
         <div>
           author:
-          <input
-            type="text"
-            name="Author"
-            value={author}
-            onChange={handleAuthorChange}
-          />
+          <input name="Author" {...omit(author, "reset")} />
         </div>
         <div>
           url:
-          <input
-            type="text"
-            name="Url"
-            value={url}
-            onChange={handleUrlChange}
-          />
+          <input name="Url" {...omit(url, "reset")} />
         </div>
         <div>
           <button type="submit">create</button>

@@ -1,33 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { omit } from "lodash";
 
-const LoginForm = ({
-  username,
-  password,
-  handleUsernameChange,
-  handlePasswordChange,
-  handleLogin
-}) => (
+const LoginForm = ({ username, password, handleLogin }) => (
   <>
     <h1>Login to application</h1>
     <form onSubmit={handleLogin}>
       <div>
         username:
-        <input
-          type="text"
-          name="Username"
-          value={username}
-          onChange={handleUsernameChange}
-        />
+        <input name="Username" {...omit(username, "reset")} />
       </div>
       <div>
         password:
-        <input
-          type="password"
-          name="Password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
+        <input name="Password" {...omit(password, "reset")} />
       </div>
       <div>
         <button type="submit">login</button>
@@ -37,10 +22,8 @@ const LoginForm = ({
 );
 
 LoginForm.propTypes = {
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
+  username: PropTypes.object.isRequired,
+  password: PropTypes.object.isRequired,
   handleLogin: PropTypes.func.isRequired
 };
 

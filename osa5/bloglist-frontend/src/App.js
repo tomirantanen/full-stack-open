@@ -3,10 +3,11 @@ import Body from "./components/Body";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Notification from "./components/Notification";
+import { useField } from "./hooks/index";
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setpassword] = useState("");
+  const username = useField("text");
+  const password = useField("password");
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [notification, setNotification] = useState(null);
@@ -48,14 +49,14 @@ function App() {
     event.preventDefault();
     try {
       const user = await loginService.login({
-        username,
-        password
+        username: username.value,
+        password: password.value
       });
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setpassword("");
+      username.reset();
+      password.reset();
     } catch (error) {
       notify("Wrong credentials", "error");
     }
@@ -83,14 +84,6 @@ function App() {
     window.localStorage.removeItem("loggedBlogappUser");
   };
 
-  const handleUsernameChange = event => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = event => {
-    setpassword(event.target.value);
-  };
-
   return (
     <div className="App">
       <header className="App-header">
@@ -98,8 +91,6 @@ function App() {
         <Body
           username={username}
           password={password}
-          handleUsernameChange={handleUsernameChange}
-          handlePasswordChange={handlePasswordChange}
           handleLogin={handleLogin}
           user={user}
           blogs={blogs}

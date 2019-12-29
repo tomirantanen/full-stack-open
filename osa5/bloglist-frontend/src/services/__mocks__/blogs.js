@@ -80,6 +80,7 @@ const getAll = () => {
   return Promise.resolve(blogs);
 };
 
+// eslint-disable-next-line no-unused-vars
 const setToken = newToken => {};
 
 export default { getAll, setToken };

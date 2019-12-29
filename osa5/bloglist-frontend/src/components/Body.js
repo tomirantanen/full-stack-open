@@ -5,8 +5,6 @@ import BlogList from "./BlogList";
 const Body = ({
   username,
   password,
-  handleUsernameChange,
-  handlePasswordChange,
   handleLogin,
   user,
   blogs,
@@ -20,8 +18,6 @@ const Body = ({
     <LoginForm
       username={username}
       password={password}
-      handleUsernameChange={handleUsernameChange}
-      handlePasswordChange={handlePasswordChange}
       handleLogin={handleLogin}
     ></LoginForm>
   ) : (
