@@ -1,10 +1,16 @@
 import React from "react";
 import { createAnecdote } from "../reducers/anecdoteReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteForm = ({ store }) => {
   const addAnecdote = event => {
     event.preventDefault();
-    store.dispatch(createAnecdote(event.target.anecdote.value));
+    const anecdote = event.target.anecdote.value;
+    store.dispatch(createAnecdote(anecdote));
+    store.dispatch(setNotification(`You created anecdote '${anecdote}'`));
+    setTimeout(() => {
+      store.dispatch(setNotification(null));
+    }, 5000);
     event.target.anecdote.value = "";
   };
   return (

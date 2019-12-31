@@ -1,19 +1,32 @@
 import React from "react";
 import { voteAnecdote } from "../reducers/anecdoteReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteList = ({ store }) => {
-  const anecdotes = store.getState();
-  const vote = id => {
-    store.dispatch(voteAnecdote(id));
+  const { filter, anecdotes } = store.getState();
+  const visibleAnecdotes =
+    filter !== null
+      ? anecdotes.filter(anecdote =>
+          anecdote.content.toLowerCase().includes(filter.toLowerCase())
+        )
+      : anecdotes;
+
+  const vote = anecdote => {
+    store.dispatch(voteAnecdote(anecdote.id));
+    store.dispatch(setNotification(`You voted '${anecdote.content}'`));
+    setTimeout(() => {
+      store.dispatch(setNotification(null));
+    }, 5000);
   };
+
   return (
     <>
-      {anecdotes.map(anecdote => (
+      {visibleAnecdotes.map(anecdote => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       ))}
