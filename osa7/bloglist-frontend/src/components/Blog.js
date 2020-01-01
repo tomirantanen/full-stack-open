@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 
 import { setNotification } from "../reducers/notificationReducer";
 import { removeBlog, addLikeToBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, user, setNotification, removeBlog, addLikeToBlog }) => {
-  const [showDetails, setShowDetails] = useState(false);
-
+const Blog = ({ blog, history }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -15,46 +15,14 @@ const Blog = ({ blog, user, setNotification, removeBlog, addLikeToBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   };
-  const isRemovable = blog.user.username === user.username;
-  const toggleDetails = () => setShowDetails(!showDetails);
 
-  const addLike = async () => {
-    try {
-      await addLikeToBlog(blog);
-    } catch (error) {
-      console.error(error);
-      setNotification(`Could not add like to blog ${blog.title}`, "error");
-    }
-  };
-
-  const remove = async () => {
-    if (!window.confirm(`Remove blog ${blog.title}?`)) {
-      return;
-    }
-
-    try {
-      await removeBlog(blog);
-    } catch (error) {
-      console.error(error);
-      setNotification("Could not remove blog", "error");
-    }
-  };
+  const openDetails = () => history.push(`/blogs/${blog.id}`);
 
   return (
     <div style={blogStyle}>
-      <p className="blog-title" onClick={toggleDetails}>
+      <p className="blog-title" onClick={openDetails}>
         {blog.title} {blog.author}
       </p>
-      {showDetails ? (
-        <>
-          <p>{blog.url}</p>
-          <p className="likes">
-            {blog.likes} likes <button onClick={addLike}>like</button>
-          </p>
-          <p>Added by {blog.user.username}</p>
-          {isRemovable ? <button onClick={remove}>remove</button> : null}
-        </>
-      ) : null}
     </div>
   );
 };
@@ -64,8 +32,11 @@ Blog.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-export default connect(null, {
-  setNotification,
-  removeBlog,
-  addLikeToBlog
-})(Blog);
+export default compose(
+  withRouter,
+  connect(null, {
+    setNotification,
+    removeBlog,
+    addLikeToBlog
+  })
+)(Blog);
