@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 const Notification = ({ notification }) =>
   notification === null ? null : (
@@ -7,4 +8,6 @@ const Notification = ({ notification }) =>
     </div>
   );
 
-export default Notification;
+const mapStateToProps = state => ({ notification: state });
+
+export default connect(mapStateToProps)(Notification);

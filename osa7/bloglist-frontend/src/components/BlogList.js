@@ -9,8 +9,7 @@ const BlogList = ({
   handleLogout,
   handleCreateBlog,
   handleUpdateBlog,
-  handleRemoveBlog,
-  notify
+  handleRemoveBlog
 }) => (
   <>
     <h1>Blogs</h1>
@@ -19,7 +18,7 @@ const BlogList = ({
       <button onClick={handleLogout}>logout</button>
     </p>
     <Togglable buttonLabel="new blog">
-      <BlogForm handleCreateBlog={handleCreateBlog} notify={notify}></BlogForm>
+      <BlogForm handleCreateBlog={handleCreateBlog}></BlogForm>
     </Togglable>
     {blogs.map(blog => (
       <Blog
@@ -27,7 +26,6 @@ const BlogList = ({
         blog={blog}
         handleUpdateBlog={handleUpdateBlog}
         handleRemoveBlog={handleRemoveBlog}
-        notify={notify}
         user={user}
       ></Blog>
     ))}

@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+
 import Body from "./components/Body";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Notification from "./components/Notification";
 import { useField } from "./hooks/index";
+import { setNotification } from "./reducers/notificationReducer";
 
-function App() {
+const App = ({ setNotification }) => {
   const username = useField("text");
   const password = useField("password");
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -27,23 +29,11 @@ function App() {
       .then(blogs => setBlogs(blogs.sort(sortByLikes)))
       .catch(error => {
         console.log(error);
-        notify("Could not load blogs", "error");
+        setNotification("Could not load blogs", "error");
       });
-  }, []);
+  }, [setNotification]);
 
   const sortByLikes = (a, b) => b.likes - a.likes;
-
-  /**
-   * Display notification message
-   * @param {string} message Message to be displayed
-   * @param {string} type Type of notification: "info" | "error"
-   */
-  const notify = (message, type) => {
-    setNotification({ message, type });
-    setTimeout(() => {
-      setNotification(null);
-    }, 5000);
-  };
 
   const handleLogin = async event => {
     event.preventDefault();
@@ -58,7 +48,7 @@ function App() {
       username.reset();
       password.reset();
     } catch (error) {
-      notify("Wrong credentials", "error");
+      setNotification("Wrong credentials", "error");
     }
   };
 
@@ -87,7 +77,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Notification notification={notification} />
+        <Notification />
         <Body
           username={username}
           password={password}
@@ -98,11 +88,10 @@ function App() {
           handleCreateBlog={handleCreateBlog}
           handleUpdateBlog={handleUpdateBlog}
           handleRemoveBlog={handleRemoveBlog}
-          notify={notify}
         ></Body>
       </header>
     </div>
   );
-}
+};
 
-export default App;
+export default connect(null, { setNotification })(App);

@@ -11,8 +11,7 @@ const Body = ({
   handleLogout,
   handleCreateBlog,
   handleUpdateBlog,
-  handleRemoveBlog,
-  notify
+  handleRemoveBlog
 }) =>
   !user ? (
     <LoginForm
@@ -28,7 +27,6 @@ const Body = ({
       handleCreateBlog={handleCreateBlog}
       handleUpdateBlog={handleUpdateBlog}
       handleRemoveBlog={handleRemoveBlog}
-      notify={notify}
     ></BlogList>
   );
 

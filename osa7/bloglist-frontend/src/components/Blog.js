@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, handleUpdateBlog, handleRemoveBlog, notify, user }) => {
+import blogService from "../services/blogs";
+import { setNotification } from "../reducers/notificationReducer";
+
+const Blog = ({
+  blog,
+  handleUpdateBlog,
+  handleRemoveBlog,
+  user,
+  setNotification
+}) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const blogStyle = {
@@ -22,7 +31,7 @@ const Blog = ({ blog, handleUpdateBlog, handleRemoveBlog, notify, user }) => {
       handleUpdateBlog(updatedBlog);
     } catch (error) {
       console.error(error);
-      notify(`Could not add like to blog ${blog.title}`, "error");
+      setNotification(`Could not add like to blog ${blog.title}`, "error");
     }
   };
 
@@ -36,7 +45,7 @@ const Blog = ({ blog, handleUpdateBlog, handleRemoveBlog, notify, user }) => {
       handleRemoveBlog(blog);
     } catch (error) {
       console.error(error);
-      notify("Could not remove blog", "error");
+      setNotification("Could not remove blog", "error");
     }
   };
 
@@ -63,8 +72,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleUpdateBlog: PropTypes.func.isRequired,
   handleRemoveBlog: PropTypes.func.isRequired,
-  notify: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };
 
-export default Blog;
+export default connect(null, { setNotification })(Blog);
