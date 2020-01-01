@@ -6,8 +6,9 @@ import LoginForm from "./LoginForm";
 import BlogList from "./BlogList";
 import UserList from "./UserList";
 import User from "./User";
-import Menu from "./Menu";
+import NavigationMenu from "./Menu";
 import BlogDetails from "./BlogDetails";
+import Notification from "./Notification";
 
 const Body = ({ user, users, blogs }) => {
   const userById = id => (users ? users.find(user => user.id === id) : null);
@@ -18,8 +19,8 @@ const Body = ({ user, users, blogs }) => {
   ) : (
     <>
       <Router>
-        <Menu />
-        <h1>Blog app</h1>
+        <NavigationMenu />
+        <Notification />
         <Route exact path="/" render={() => <BlogList user={user} />} />
         <Route exact path="/users" render={() => <UserList />} />
         <Route

@@ -2,6 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
+import {
+  Segment,
+  Button,
+  Divider,
+  Header,
+  Icon,
+  Table,
+  Label
+} from "semantic-ui-react";
 
 import { setNotification } from "../reducers/notificationReducer";
 import { removeBlog, addLikeToBlog } from "../reducers/blogReducer";
@@ -17,13 +26,6 @@ const BlogDetails = ({
   if (!user || !blog) {
     return null;
   }
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5
-  };
 
   const isRemovable = blog.user.username === user.username;
 
@@ -51,16 +53,43 @@ const BlogDetails = ({
   };
 
   return blog ? (
-    <div style={blogStyle}>
-      <h2>{blog.title}</h2>
-
-      <p>{blog.url}</p>
-      <p className="likes">
-        {blog.likes} likes <button onClick={addLike}>like</button>
-      </p>
-      <p>Added by {blog.user.username}</p>
-      {isRemovable ? <button onClick={remove}>remove</button> : null}
-    </div>
+    <Segment>
+      <Divider horizontal>
+        <Header as="h4">
+          <Icon name="tag" />
+          Blog Details
+        </Header>
+      </Divider>
+      <Table definition>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell width={2}>Title</Table.Cell>
+            <Table.Cell>{blog.title}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Likes</Table.Cell>
+            <Table.Cell>
+              <Button color="red" size="mini" onClick={addLike}>
+                <Icon name="heart" />
+                Like
+              </Button>
+              <Label basic color="red" pointing="left">
+                {blog.likes}
+              </Label>
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Url</Table.Cell>
+            <Table.Cell>{blog.url}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Added by</Table.Cell>
+            <Table.Cell>{blog.user.username}</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+      {isRemovable ? <Button onClick={remove}>remove</Button> : null}
+    </Segment>
   ) : null;
 };
 

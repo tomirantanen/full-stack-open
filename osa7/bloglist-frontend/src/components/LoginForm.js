@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { omit } from "lodash";
+import { Form, Button, Header } from "semantic-ui-react";
 
 import { useField } from "../hooks/index";
 import loginService from "../services/login";
@@ -29,20 +30,28 @@ const LoginForm = ({ setLoggedInUser, setNotification }) => {
 
   return (
     <>
-      <h1>Login to application</h1>
-      <form onSubmit={login}>
-        <div>
-          username:
-          <input name="Username" {...omit(username, "reset")} />
-        </div>
-        <div>
-          password:
-          <input name="Password" {...omit(password, "reset")} />
-        </div>
-        <div>
-          <button type="submit">login</button>
-        </div>
-      </form>
+      <Header as="h1">Login to application</Header>
+      <Form onSubmit={login}>
+        <Form.Field>
+          <label>Username</label>
+          <input
+            placeholder="Username"
+            name="Username"
+            {...omit(username, "reset")}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>Password</label>
+          <input
+            placeholder="Password"
+            name="Password"
+            {...omit(password, "reset")}
+          />
+        </Form.Field>
+        <Button size="tiny" type="submit">
+          Login
+        </Button>
+      </Form>
     </>
   );
 };

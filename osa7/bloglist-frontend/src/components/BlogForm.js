@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { omit } from "lodash";
+import { Header, Form, Button } from "semantic-ui-react";
 
 import { useField } from "../hooks/index";
 import { setNotification } from "../reducers/notificationReducer";
@@ -29,24 +30,24 @@ const BlogForm = ({ setNotification, createBlog }) => {
 
   return (
     <>
-      <h1>Create new</h1>
-      <form onSubmit={handleFormSubmit}>
-        <div>
-          title:
-          <input name="Title" {...omit(title, "reset")} />
-        </div>
-        <div>
-          author:
-          <input name="Author" {...omit(author, "reset")} />
-        </div>
-        <div>
-          url:
-          <input name="Url" {...omit(url, "reset")} />
-        </div>
-        <div>
-          <button type="submit">create</button>
-        </div>
-      </form>
+      <Header as="h2">Create blog</Header>
+      <Form onSubmit={handleFormSubmit}>
+        <Form.Field>
+          <label>Title</label>
+          <input placeholder="Title" {...omit(title, "reset")} />
+        </Form.Field>
+        <Form.Field>
+          <label>Author</label>
+          <input placeholder="Author" {...omit(author, "reset")} />
+        </Form.Field>
+        <Form.Field>
+          <label>Url</label>
+          <input placeholder="Url" {...omit(url, "reset")} />
+        </Form.Field>
+        <Button size="tiny" type="submit">
+          Create
+        </Button>
+      </Form>
     </>
   );
 };

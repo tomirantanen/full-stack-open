@@ -1,15 +1,18 @@
 import React from "react";
+import { List, Segment, Header } from "semantic-ui-react";
 
 const User = ({ user }) =>
   user ? (
     <>
-      <h2>{user.username}</h2>
-      <h3>Added blogs</h3>
-      <ul>
-        {user.blogs.map(blog => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
+      <Segment>
+        <Header as="h2">{user.username}</Header>
+        <Header as="h3">Added blogs</Header>
+        <List>
+          {user.blogs.map(blog => (
+            <List.Item key={blog.id}>{blog.title}</List.Item>
+          ))}
+        </List>
+      </Segment>
     </>
   ) : null;
 
