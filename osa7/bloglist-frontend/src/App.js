@@ -7,8 +7,14 @@ import Notification from "./components/Notification";
 import { setNotification } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setLoggedInUser } from "./reducers/userReducer";
+import { initializeUsers } from "./reducers/usersReducer";
 
-const App = ({ setNotification, initializeBlogs, setLoggedInUser }) => {
+const App = ({
+  setNotification,
+  initializeBlogs,
+  setLoggedInUser,
+  initializeUsers
+}) => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
@@ -30,6 +36,10 @@ const App = ({ setNotification, initializeBlogs, setLoggedInUser }) => {
     fetchBlogs();
   }, [initializeBlogs, setNotification]);
 
+  useEffect(() => {
+    initializeUsers();
+  }, [initializeUsers]);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -43,5 +53,6 @@ const App = ({ setNotification, initializeBlogs, setLoggedInUser }) => {
 export default connect(null, {
   setNotification,
   initializeBlogs,
-  setLoggedInUser
+  setLoggedInUser,
+  initializeUsers
 })(App);

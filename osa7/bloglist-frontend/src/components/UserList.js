@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { initializeUsers } from "../reducers/usersReducer";
-
-const UserList = ({ users, initializeUsers }) => {
-  useEffect(() => {
-    initializeUsers();
-  }, [initializeUsers]);
-
+const UserList = ({ users }) => {
   return users ? (
     <>
       <h1>Users</h1>
@@ -21,7 +16,9 @@ const UserList = ({ users, initializeUsers }) => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
-              <td>{user.username}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.username}</Link>
+              </td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}
@@ -35,4 +32,4 @@ const mapStateToProps = state => ({
   users: state.users
 });
 
-export default connect(mapStateToProps, { initializeUsers })(UserList);
+export default connect(mapStateToProps)(UserList);
