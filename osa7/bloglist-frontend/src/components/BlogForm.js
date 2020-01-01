@@ -1,13 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { omit } from "lodash";
 
-import blogService from "../services/blogs";
 import { useField } from "../hooks/index";
 import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 
-const BlogForm = ({ handleCreateBlog, setNotification }) => {
+const BlogForm = ({ setNotification, createBlog }) => {
   const title = useField("text");
   const author = useField("text");
   const url = useField("text");
@@ -20,9 +19,7 @@ const BlogForm = ({ handleCreateBlog, setNotification }) => {
       url: url.value
     };
     try {
-      const createdBlog = await blogService.create(blog);
-      handleCreateBlog(createdBlog);
-
+      await createBlog(blog);
       setNotification(`Blog ${blog.title} created`, "info");
     } catch (error) {
       console.error(error);
@@ -54,8 +51,7 @@ const BlogForm = ({ handleCreateBlog, setNotification }) => {
   );
 };
 
-BlogForm.propTypes = {
-  handleCreateBlog: PropTypes.func.isRequired
-};
-
-export default connect(null, { setNotification })(BlogForm);
+export default connect(null, {
+  setNotification,
+  createBlog
+})(BlogForm);

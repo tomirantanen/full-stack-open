@@ -2,17 +2,7 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import BlogList from "./BlogList";
 
-const Body = ({
-  username,
-  password,
-  handleLogin,
-  user,
-  blogs,
-  handleLogout,
-  handleCreateBlog,
-  handleUpdateBlog,
-  handleRemoveBlog
-}) =>
+const Body = ({ username, password, handleLogin, user, handleLogout }) =>
   !user ? (
     <LoginForm
       username={username}
@@ -20,14 +10,7 @@ const Body = ({
       handleLogin={handleLogin}
     ></LoginForm>
   ) : (
-    <BlogList
-      user={user}
-      blogs={blogs}
-      handleLogout={handleLogout}
-      handleCreateBlog={handleCreateBlog}
-      handleUpdateBlog={handleUpdateBlog}
-      handleRemoveBlog={handleRemoveBlog}
-    ></BlogList>
+    <BlogList user={user} handleLogout={handleLogout}></BlogList>
   );
 
 export default Body;

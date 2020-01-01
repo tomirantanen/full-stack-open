@@ -8,6 +8,8 @@ const Notification = ({ notification }) =>
     </div>
   );
 
-const mapStateToProps = state => ({ notification: state });
+const mapStateToProps = state => ({
+  notification: state.notification
+});
 
 export default connect(mapStateToProps)(Notification);

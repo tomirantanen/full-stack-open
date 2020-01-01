@@ -2,16 +2,10 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import blogService from "../services/blogs";
 import { setNotification } from "../reducers/notificationReducer";
+import { removeBlog, addLikeToBlog } from "../reducers/blogReducer";
 
-const Blog = ({
-  blog,
-  handleUpdateBlog,
-  handleRemoveBlog,
-  user,
-  setNotification
-}) => {
+const Blog = ({ blog, user, setNotification, removeBlog, addLikeToBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const blogStyle = {
@@ -25,24 +19,21 @@ const Blog = ({
   const toggleDetails = () => setShowDetails(!showDetails);
 
   const addLike = async () => {
-    const blogForUpdating = { ...blog, likes: blog.likes + 1 };
     try {
-      const updatedBlog = await blogService.update(blogForUpdating);
-      handleUpdateBlog(updatedBlog);
+      await addLikeToBlog(blog);
     } catch (error) {
       console.error(error);
       setNotification(`Could not add like to blog ${blog.title}`, "error");
     }
   };
 
-  const removeBlog = async () => {
+  const remove = async () => {
     if (!window.confirm(`Remove blog ${blog.title}?`)) {
       return;
     }
 
     try {
-      await blogService.remove(blog);
-      handleRemoveBlog(blog);
+      await removeBlog(blog);
     } catch (error) {
       console.error(error);
       setNotification("Could not remove blog", "error");
@@ -61,7 +52,7 @@ const Blog = ({
             {blog.likes} likes <button onClick={addLike}>like</button>
           </p>
           <p>Added by {blog.user.username}</p>
-          {isRemovable ? <button onClick={removeBlog}>remove</button> : null}
+          {isRemovable ? <button onClick={remove}>remove</button> : null}
         </>
       ) : null}
     </div>
@@ -70,9 +61,11 @@ const Blog = ({
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleUpdateBlog: PropTypes.func.isRequired,
-  handleRemoveBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };
 
-export default connect(null, { setNotification })(Blog);
+export default connect(null, {
+  setNotification,
+  removeBlog,
+  addLikeToBlog
+})(Blog);
