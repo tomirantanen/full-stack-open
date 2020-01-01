@@ -6,28 +6,20 @@ import LoginForm from "./LoginForm";
 import BlogList from "./BlogList";
 import UserList from "./UserList";
 import User from "./User";
+import Menu from "./Menu";
 import BlogDetails from "./BlogDetails";
-import { logoutUser } from "../reducers/userReducer";
 
-const Body = ({ user, users, blogs, logoutUser }) => {
+const Body = ({ user, users, blogs }) => {
   const userById = id => (users ? users.find(user => user.id === id) : null);
   const blogById = id => (blogs ? blogs.find(blog => blog.id === id) : null);
-
-  const logout = () => {
-    logoutUser();
-    window.localStorage.removeItem("loggedBlogappUser");
-  };
 
   return !user ? (
     <LoginForm />
   ) : (
     <>
-      <h1>Blogs</h1>
-      <p>
-        {user.name} logged in
-        <button onClick={logout}>logout</button>
-      </p>
       <Router>
+        <Menu />
+        <h1>Blog app</h1>
         <Route exact path="/" render={() => <BlogList user={user} />} />
         <Route exact path="/users" render={() => <UserList />} />
         <Route
@@ -51,4 +43,4 @@ const mapStateToProps = state => ({
   blogs: state.blogs
 });
 
-export default connect(mapStateToProps, { logoutUser })(Body);
+export default connect(mapStateToProps)(Body);
