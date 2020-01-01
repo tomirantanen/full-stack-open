@@ -1,16 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
+
 import LoginForm from "./LoginForm";
 import BlogList from "./BlogList";
 
-const Body = ({ username, password, handleLogin, user, handleLogout }) =>
-  !user ? (
-    <LoginForm
-      username={username}
-      password={password}
-      handleLogin={handleLogin}
-    ></LoginForm>
-  ) : (
-    <BlogList user={user} handleLogout={handleLogout}></BlogList>
-  );
+const Body = ({ user }) =>
+  !user ? <LoginForm /> : <BlogList user={user}></BlogList>;
 
-export default Body;
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(Body);
