@@ -37,6 +37,7 @@ const LoginForm = ({ setLoggedInUser, setNotification }) => {
           <input
             placeholder="Username"
             name="Username"
+            data-cy="username"
             {...omit(username, "reset")}
           />
         </Form.Field>
@@ -45,10 +46,11 @@ const LoginForm = ({ setLoggedInUser, setNotification }) => {
           <input
             placeholder="Password"
             name="Password"
+            data-cy="password"
             {...omit(password, "reset")}
           />
         </Form.Field>
-        <Button size="tiny" type="submit">
+        <Button size="tiny" type="submit" data-cy="login">
           Login
         </Button>
       </Form>

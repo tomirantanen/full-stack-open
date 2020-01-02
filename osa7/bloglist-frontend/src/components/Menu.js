@@ -34,12 +34,13 @@ const NavigationMenu = ({ user, logoutUser }) => {
           as={Link}
           to="/users"
           onClick={handleClick}
+          data-cy="users-menu"
         >
           Users
         </Menu.Item>
 
         <Menu.Menu position="right">
-          <Menu.Item name="LoggedUser" active={false}>
+          <Menu.Item name="LoggedUser" active={false} data-cy="logged-user">
             {user.name} logged in
           </Menu.Item>
           <Menu.Item>

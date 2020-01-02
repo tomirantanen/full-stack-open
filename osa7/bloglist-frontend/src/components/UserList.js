@@ -18,7 +18,9 @@ const UserList = ({ users }) => {
           {users.map(user => (
             <Table.Row key={user.id}>
               <Table.Cell>
-                <Link to={`/users/${user.id}`}>{user.username}</Link>
+                <Link to={`/users/${user.id}`} data-cy="user-link">
+                  {user.username}
+                </Link>
               </Table.Cell>
               <Table.Cell>{user.blogs.length}</Table.Cell>
             </Table.Row>
