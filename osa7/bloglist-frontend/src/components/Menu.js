@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../reducers/userReducer";
-import { Menu } from "semantic-ui-react";
+import { Menu, Button } from "semantic-ui-react";
 
 const NavigationMenu = ({ user, logoutUser }) => {
   const [activeButton, setActiveButton] = useState("Blogs");
@@ -42,11 +42,11 @@ const NavigationMenu = ({ user, logoutUser }) => {
           <Menu.Item name="LoggedUser" active={false}>
             {user.name} logged in
           </Menu.Item>
-          <Menu.Item
-            name="Logout"
-            active={activeButton === "Logout"}
-            onClick={logout}
-          />
+          <Menu.Item>
+            <Button active={activeButton === "Logout"} onClick={logout}>
+              Logout
+            </Button>
+          </Menu.Item>
         </Menu.Menu>
       </Menu>
     </div>

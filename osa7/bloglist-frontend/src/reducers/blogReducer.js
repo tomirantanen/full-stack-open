@@ -1,4 +1,5 @@
 import blogService from "../services/blogs";
+import commentService from "../services/comments";
 
 const sortByLikes = (a, b) => b.likes - a.likes;
 
@@ -57,6 +58,17 @@ export const addLikeToBlog = blog => {
     dispatch({
       type: "UPDATE_BLOG",
       data: updatedBlog
+    });
+  };
+};
+
+export const addCommentToBlog = (blog, comment) => {
+  return async dispatch => {
+    const createdComment = await commentService.create(blog, comment);
+    blog.comments.push(createdComment);
+    dispatch({
+      type: "UPDATE_BLOG",
+      data: blog
     });
   };
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
+import { omit } from "lodash";
 import {
   Segment,
   Button,
@@ -14,8 +15,13 @@ import {
   List
 } from "semantic-ui-react";
 
+import { useField } from "../hooks/index";
 import { setNotification } from "../reducers/notificationReducer";
-import { removeBlog, addLikeToBlog } from "../reducers/blogReducer";
+import {
+  removeBlog,
+  addLikeToBlog,
+  addCommentToBlog
+} from "../reducers/blogReducer";
 
 const BlogDetails = ({
   blog,
@@ -23,8 +29,11 @@ const BlogDetails = ({
   setNotification,
   removeBlog,
   addLikeToBlog,
+  addCommentToBlog,
   history
 }) => {
+  const comment = useField("text");
+
   if (!user || !blog) {
     return null;
   }
@@ -37,6 +46,16 @@ const BlogDetails = ({
     } catch (error) {
       console.error(error);
       setNotification(`Could not add like to blog ${blog.title}`, "error");
+    }
+  };
+
+  const addComment = async () => {
+    try {
+      await addCommentToBlog(blog, comment.value);
+      comment.reset();
+    } catch (error) {
+      console.error(error);
+      setNotification(`Could not add comment to blog ${blog.title}`, "error");
     }
   };
 
@@ -102,12 +121,16 @@ const BlogDetails = ({
           </List.Item>
         ))}
         <Form reply>
-          <Form.TextArea />
+          <Form.TextArea
+            placeholder="Comment blog"
+            {...omit(comment, "reset")}
+          />
           <Button
             content="Add Comment"
             labelPosition="left"
             icon="edit"
             primary
+            onClick={addComment}
           />
           {isRemovable ? (
             <Button floated="right" onClick={remove}>
@@ -129,6 +152,7 @@ export default compose(
   connect(mapStateToProps, {
     setNotification,
     removeBlog,
-    addLikeToBlog
+    addLikeToBlog,
+    addCommentToBlog
   })
 )(BlogDetails);
