@@ -34,17 +34,25 @@ const BlogForm = ({ setNotification, createBlog }) => {
       <Form onSubmit={handleFormSubmit}>
         <Form.Field>
           <label>Title</label>
-          <input placeholder="Title" {...omit(title, "reset")} />
+          <input
+            placeholder="Title"
+            {...omit(title, "reset")}
+            data-cy="blog-title"
+          />
         </Form.Field>
         <Form.Field>
           <label>Author</label>
-          <input placeholder="Author" {...omit(author, "reset")} />
+          <input
+            placeholder="Author"
+            {...omit(author, "reset")}
+            data-cy="blog-author"
+          />
         </Form.Field>
         <Form.Field>
           <label>Url</label>
-          <input placeholder="Url" {...omit(url, "reset")} />
+          <input placeholder="Url" {...omit(url, "reset")} data-cy="blog-url" />
         </Form.Field>
-        <Button size="tiny" type="submit">
+        <Button size="tiny" type="submit" data-cy="create-blog">
           Create
         </Button>
       </Form>

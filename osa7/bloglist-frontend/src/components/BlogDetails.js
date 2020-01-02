@@ -88,20 +88,31 @@ const BlogDetails = ({
             <Table.Cell>{blog.title}</Table.Cell>
           </Table.Row>
           <Table.Row>
+            <Table.Cell>Author</Table.Cell>
+            <Table.Cell>{blog.author}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
             <Table.Cell>Likes</Table.Cell>
             <Table.Cell>
-              <Button color="red" size="mini" onClick={addLike}>
+              <Button
+                color="red"
+                size="mini"
+                onClick={addLike}
+                data-cy="add-like"
+              >
                 <Icon name="heart" />
                 Like
               </Button>
-              <Label basic color="red" pointing="left">
+              <Label basic color="red" pointing="left" data-cy="likes-count">
                 {blog.likes}
               </Label>
             </Table.Cell>
           </Table.Row>
           <Table.Row>
             <Table.Cell>Url</Table.Cell>
-            <Table.Cell>{blog.url}</Table.Cell>
+            <Table.Cell>
+              <a href={blog.url}>{blog.url}</a>
+            </Table.Cell>
           </Table.Row>
           <Table.Row>
             <Table.Cell>Added by</Table.Cell>
@@ -116,7 +127,7 @@ const BlogDetails = ({
 
       <List relaxed>
         {blog.comments.map(comment => (
-          <List.Item key={comment.id}>
+          <List.Item key={comment.id} data-cy="bloglist-item">
             <List.Content>{comment.text}</List.Content>
           </List.Item>
         ))}
@@ -124,6 +135,7 @@ const BlogDetails = ({
           <Form.TextArea
             placeholder="Comment blog"
             {...omit(comment, "reset")}
+            data-cy="comment-text-area"
           />
           <Button
             content="Add Comment"
@@ -131,9 +143,10 @@ const BlogDetails = ({
             icon="edit"
             primary
             onClick={addComment}
+            data-cy="add-comment"
           />
           {isRemovable ? (
-            <Button floated="right" onClick={remove}>
+            <Button floated="right" onClick={remove} data-cy="remove-blog">
               remove blog
             </Button>
           ) : null}

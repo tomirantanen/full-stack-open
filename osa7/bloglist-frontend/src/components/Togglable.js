@@ -15,7 +15,12 @@ const Togglable = props => {
     <div>
       <div style={hideWhenVisible}>
         <Segment basic>
-          <Button size="tiny" floated="right" onClick={toggleVisibility}>
+          <Button
+            primary
+            size="tiny"
+            floated="right"
+            onClick={toggleVisibility}
+          >
             {props.buttonLabel}
           </Button>
         </Segment>
