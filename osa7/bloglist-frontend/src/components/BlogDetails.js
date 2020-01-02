@@ -9,7 +9,9 @@ import {
   Header,
   Icon,
   Table,
-  Label
+  Label,
+  Form,
+  List
 } from "semantic-ui-react";
 
 import { setNotification } from "../reducers/notificationReducer";
@@ -88,7 +90,32 @@ const BlogDetails = ({
           </Table.Row>
         </Table.Body>
       </Table>
-      {isRemovable ? <Button onClick={remove}>remove</Button> : null}
+
+      <Header as="h3" dividing>
+        Comments
+      </Header>
+
+      <List relaxed>
+        {blog.comments.map(comment => (
+          <List.Item key={comment.id}>
+            <List.Content>{comment.text}</List.Content>
+          </List.Item>
+        ))}
+        <Form reply>
+          <Form.TextArea />
+          <Button
+            content="Add Comment"
+            labelPosition="left"
+            icon="edit"
+            primary
+          />
+          {isRemovable ? (
+            <Button floated="right" onClick={remove}>
+              remove blog
+            </Button>
+          ) : null}
+        </Form>
+      </List>
     </Segment>
   ) : null;
 };

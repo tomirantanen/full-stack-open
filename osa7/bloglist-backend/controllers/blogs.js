@@ -6,10 +6,12 @@ const config = require("../utils/config");
 
 blogsRouter.get("/", async (request, response, next) => {
   try {
-    const blogs = await Blog.find({}).populate("user", {
-      username: 1,
-      name: 1
-    });
+    const blogs = await Blog.find({})
+      .populate("user", {
+        username: 1,
+        name: 1
+      })
+      .populate("comments", { text: 1 });
     response.json(blogs);
   } catch (error) {
     next(error);
