@@ -12,24 +12,26 @@ const Authors = ({ show, authors }) => {
       {authors.loading ? (
         <p>Loading authors...</p>
       ) : (
-        <table>
-          <tbody>
-            <tr>
-              <th></th>
-              <th>Born</th>
-              <th>Books</th>
-            </tr>
-            {authors.data.allAuthors.map(author => (
-              <tr key={author.name}>
-                <td>{author.name}</td>
-                <td>{author.born}</td>
-                <td>{author.bookCount}</td>
+        <>
+          <table>
+            <tbody>
+              <tr>
+                <th></th>
+                <th>Born</th>
+                <th>Books</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+              {authors.data.allAuthors.map(author => (
+                <tr key={author.name}>
+                  <td>{author.name}</td>
+                  <td>{author.born}</td>
+                  <td>{author.bookCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <EditAuthor authors={authors.data.allAuthors} />
+        </>
       )}
-      <EditAuthor />
     </div>
   );
 };
