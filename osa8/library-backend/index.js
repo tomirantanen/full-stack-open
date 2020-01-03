@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, UserInputError, gql } = require("apollo-server");
 const uuidv4 = require("uuid/v4");
 
 const config = require("./utils/config");
@@ -63,12 +63,24 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author });
       if (author) {
         const book = new Book({ ...args, author });
-        return book.save();
+        try {
+          return await book.save();
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          });
+        }
       } else {
         const newAuthor = new Author({ name: args.author });
-        const savedAuthor = await newAuthor.save();
-        const book = new Book({ ...args, author: savedAuthor });
-        return book.save();
+        try {
+          const savedAuthor = await newAuthor.save();
+          const book = new Book({ ...args, author: savedAuthor });
+          return await book.save();
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          });
+        }
       }
     },
     editAuthor: (root, args) =>
