@@ -1,7 +1,7 @@
 import React from "react";
 import EditAuthor from "./EditAuthor";
 
-const Authors = ({ show, authors }) => {
+const Authors = ({ show, authors, handleError }) => {
   if (!show) {
     return null;
   }
@@ -29,7 +29,10 @@ const Authors = ({ show, authors }) => {
               ))}
             </tbody>
           </table>
-          <EditAuthor authors={authors.data.allAuthors} />
+          <EditAuthor
+            handleError={handleError}
+            authors={authors.data.allAuthors}
+          />
         </>
       )}
     </div>

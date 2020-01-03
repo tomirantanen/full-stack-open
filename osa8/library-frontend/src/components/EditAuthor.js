@@ -4,11 +4,12 @@ import { useMutation } from "@apollo/react-hooks";
 
 import { UPDATE_AUTHOR, ALL_AUTHORS } from "../graphql";
 
-const EditAuthor = ({ authors }) => {
+const EditAuthor = ({ authors, handleError }) => {
   const [born, setBorn] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState({});
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
+    onError: handleError,
     variables: { name: selectedAuthor.value, born },
     refetchQueries: [{ query: ALL_AUTHORS }]
   });
