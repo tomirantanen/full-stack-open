@@ -44,30 +44,7 @@ const App = () => {
   const addPerson = event => {
     event.preventDefault();
     const existingPerson = persons.find(person => person.name === newName);
-    if (
-      existingPerson &&
-      window.confirm(
-        `${existingPerson.name} is already added to phonebook, replace the old number with new one?`
-      )
-    ) {
-      personService
-        .updatePerson({ ...existingPerson, number: newNumber })
-        .then(updatedPerson => {
-          setPersons(
-            persons.map(person =>
-              person.name !== updatedPerson.name ? person : updatedPerson
-            )
-          );
-          notify(`Updated ${updatedPerson.name} phone number`, "info");
-        })
-        .catch(error => {
-          console.error(error);
-          notify(
-            `Could not update ${existingPerson.name} phone number`,
-            "error"
-          );
-        });
-    } else {
+    if (!existingPerson) {
       personService
         .createPerson({ name: newName, number: newNumber })
         .then(createdPerson => {
@@ -81,7 +58,32 @@ const App = () => {
             "error"
           );
         });
+    } else {
+      const confirm = window.confirm(
+        `${existingPerson.name} is already added to phonebook, replace the old number with new one?`
+      );
+
+      if (confirm) {
+        personService
+          .updatePerson({ ...existingPerson, number: newNumber })
+          .then(updatedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.name !== updatedPerson.name ? person : updatedPerson
+              )
+            );
+            notify(`Updated ${updatedPerson.name} phone number`, "info");
+          })
+          .catch(error => {
+            console.error(error);
+            notify(
+              `Could not update ${existingPerson.name} phone number`,
+              "error"
+            );
+          });
+      }
     }
+
     setNewName("");
     setNewNumber("");
   };
