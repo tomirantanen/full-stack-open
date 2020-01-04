@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import { uniq, flatten } from "lodash";
-import BooksTable from "./BooksTable";
+import { useQuery } from "@apollo/react-hooks";
 
-const Books = ({ show, books }) => {
+import BooksTable from "./BooksTable";
+import { BOOKS_BY_GENRE, ALL_GENRES } from "../graphql";
+
+const Books = ({ show }) => {
   const [genre, setGenre] = useState("");
+  const visibleBooks = useQuery(BOOKS_BY_GENRE, {
+    variables: { genre }
+  });
+  const allGenres = useQuery(ALL_GENRES);
   if (!show) {
     return null;
   }
 
-  const genres = () =>
-    uniq(flatten(books.data.allBooks.map(book => book.genres)));
-
-  const visibleBooks = genre
-    ? books.data.allBooks.filter(book => book.genres.includes(genre))
-    : books.data.allBooks;
+  const genres =
+    allGenres.loading || !allGenres
+      ? []
+      : uniq(flatten(allGenres.data.allBooks.map(book => book.genres)));
 
   return (
     <div>
       <h2>Books</h2>
 
-      {books.loading ? (
+      {visibleBooks.loading ? (
         <p>Loading books...</p>
       ) : (
         <>
@@ -30,8 +35,8 @@ const Books = ({ show, books }) => {
           ) : (
             <p>In all genres</p>
           )}
-          <BooksTable books={visibleBooks} />
-          {genres().map(genre => (
+          <BooksTable books={visibleBooks.data.allBooks} />
+          {genres.map(genre => (
             <button onClick={() => setGenre(genre)} key={genre}>
               {genre}
             </button>

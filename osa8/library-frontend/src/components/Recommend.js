@@ -1,19 +1,21 @@
 import React from "react";
+import { useQuery } from "@apollo/react-hooks";
 
 import BooksTable from "./BooksTable";
+import { BOOKS_BY_GENRE } from "../graphql";
 
-const Recommend = ({ user, show, books }) => {
+const Recommend = ({ user, show }) => {
+  const genre = !user || user.loading ? "" : user.data.me.favoriteGenre;
+  const recommendedBooks = useQuery(BOOKS_BY_GENRE, {
+    variables: { genre }
+  });
   if (!show) {
     return null;
   }
 
-  if (user.loading || books.loading) {
+  if (user.loading || recommendedBooks.loading) {
     return <div>loading...</div>;
   }
-
-  const booksByGenre = books.data.allBooks.filter(book =>
-    book.genres.includes(user.data.me.favoriteGenre)
-  );
 
   return (
     <div>
@@ -21,7 +23,9 @@ const Recommend = ({ user, show, books }) => {
       <p>
         Books in your favorite genre <b>{user.data.me.favoriteGenre}</b>
       </p>
-      {books ? <BooksTable books={booksByGenre} /> : null}
+      {recommendedBooks ? (
+        <BooksTable books={recommendedBooks.data.allBooks} />
+      ) : null}
     </div>
   );
 };

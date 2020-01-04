@@ -5,7 +5,7 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
-import { ALL_AUTHORS, ALL_BOOKS, LOGIN, USER } from "./graphql";
+import { ALL_AUTHORS, LOGIN, USER } from "./graphql";
 import Recommend from "./components/Recommend";
 
 const App = () => {
@@ -33,7 +33,6 @@ const App = () => {
   };
 
   const user = useQuery(USER);
-  const books = useQuery(ALL_BOOKS);
   const authors = useQuery(ALL_AUTHORS);
   const [login] = useMutation(LOGIN, { onError: handleError });
 
@@ -61,11 +60,11 @@ const App = () => {
         authors={authors}
         show={page === "authors"}
       />
-      <Books books={books} show={page === "books"} />
+      <Books show={page === "books"} />
       {token ? (
         <>
           <NewBook show={page === "add"} />
-          <Recommend user={user} books={books} show={page === "recommend"} />
+          <Recommend user={user} show={page === "recommend"} />
         </>
       ) : (
         <Login
