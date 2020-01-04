@@ -1,19 +1,5 @@
 import { gql } from "apollo-boost";
 
-const BOOKS_BY_GENRE = gql`
-  query allBooks($genre: String!) {
-    allBooks(genre: $genre) {
-      title
-      published
-      author {
-        name
-      }
-      id
-      genres
-    }
-  }
-`;
-
 const BOOK_DETAILS = gql`
   fragment BookDetails on Book {
     title
@@ -26,6 +12,16 @@ const BOOK_DETAILS = gql`
     id
     genres
   }
+`;
+
+const BOOKS_BY_GENRE = gql`
+  query allBooks($genre: String!) {
+    allBooks(genre: $genre) {
+      ...BookDetails
+    }
+  }
+
+  ${BOOK_DETAILS}
 `;
 
 const ALL_GENRES = gql`
@@ -70,6 +66,7 @@ const CREATE_BOOK = gql`
       title
       author {
         name
+        id
       }
       published
       id

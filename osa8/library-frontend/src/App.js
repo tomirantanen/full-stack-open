@@ -10,7 +10,13 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
-import { ALL_AUTHORS, LOGIN, USER, BOOK_ADDED } from "./graphql";
+import {
+  ALL_AUTHORS,
+  LOGIN,
+  USER,
+  BOOK_ADDED,
+  BOOKS_BY_GENRE
+} from "./graphql";
 import Recommend from "./components/Recommend";
 
 const App = () => {
@@ -37,11 +43,28 @@ const App = () => {
     window.location.reload();
   };
 
+  const updateCache = addedBook => {
+    const includedIn = (set, object) => set.map(p => p.id).includes(object.id);
+
+    const dataInStore = client.readQuery({
+      query: BOOKS_BY_GENRE,
+      variables: { genre: "" }
+    });
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: BOOKS_BY_GENRE,
+        variables: { genre: "" },
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) }
+      });
+    }
+  };
+
   const user = useQuery(USER);
   const authors = useQuery(ALL_AUTHORS);
   const [login] = useMutation(LOGIN, { onError: handleError });
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
+      updateCache(subscriptionData.data.bookAdded);
       window.alert(
         `A new book ${subscriptionData.data.bookAdded.title} has been added to library collection`
       );
