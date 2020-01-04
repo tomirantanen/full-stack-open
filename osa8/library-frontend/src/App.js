@@ -98,7 +98,7 @@ const App = () => {
       <Books show={page === "books"} />
       {token ? (
         <>
-          <NewBook show={page === "add"} />
+          <NewBook updateCache={updateCache} show={page === "add"} />
           <Recommend user={user} show={page === "recommend"} />
         </>
       ) : (

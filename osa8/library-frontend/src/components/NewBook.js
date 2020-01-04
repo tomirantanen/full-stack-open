@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/react-hooks";
 
 import { ALL_AUTHORS, CREATE_BOOK } from "../graphql";
 
-const NewBook = props => {
+const NewBook = ({ show, updateCache }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -12,10 +12,13 @@ const NewBook = props => {
 
   const [createBook] = useMutation(CREATE_BOOK, {
     variables: { title, author, published, genres },
-    refetchQueries: [{ query: ALL_AUTHORS }]
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    update: (store, response) => {
+      updateCache(response.data.addBook);
+    }
   });
 
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
