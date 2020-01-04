@@ -5,6 +5,7 @@ const {
   PubSub
 } = require("apollo-server");
 const jwt = require("jsonwebtoken");
+const { uniq, flatten } = require("lodash");
 const pubsub = new PubSub();
 
 const config = require("./utils/config");
@@ -25,6 +26,10 @@ const resolvers = {
         searchConditions = { ...searchConditions, author };
       }
       return Book.find({ ...searchConditions }).populate("author");
+    },
+    allGenres: async () => {
+      const books = await Book.find({});
+      return uniq(flatten(books.map(book => book.genres)));
     },
     allAuthors: () => Author.find({}),
     me: (root, args, context) => {

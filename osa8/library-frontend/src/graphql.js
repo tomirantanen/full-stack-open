@@ -15,10 +15,8 @@ const BOOKS_BY_GENRE = gql`
 `;
 
 const ALL_GENRES = gql`
-  {
-    allBooks {
-      genres
-    }
+  query {
+    allGenres
   }
 `;
 

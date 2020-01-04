@@ -5,7 +5,10 @@ import BooksTable from "./BooksTable";
 import { BOOKS_BY_GENRE } from "../graphql";
 
 const Recommend = ({ user, show }) => {
-  const genre = !user || user.loading ? "" : user.data.me.favoriteGenre;
+  const genre =
+    !user || user.loading || !user.data || !user.data.me
+      ? ""
+      : user.data.me.favoriteGenre;
   const recommendedBooks = useQuery(BOOKS_BY_GENRE, {
     variables: { genre }
   });

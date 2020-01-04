@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { uniq, flatten } from "lodash";
 import { useQuery } from "@apollo/react-hooks";
 
 import BooksTable from "./BooksTable";
@@ -10,15 +9,13 @@ const Books = ({ show }) => {
   const visibleBooks = useQuery(BOOKS_BY_GENRE, {
     variables: { genre }
   });
-  const allGenres = useQuery(ALL_GENRES);
+  const genreResponse = useQuery(ALL_GENRES);
   if (!show) {
     return null;
   }
 
   const genres =
-    allGenres.loading || !allGenres
-      ? []
-      : uniq(flatten(allGenres.data.allBooks.map(book => book.genres)));
+    genreResponse.loading || !genreResponse ? [] : genreResponse.data.allGenres;
 
   return (
     <div>
