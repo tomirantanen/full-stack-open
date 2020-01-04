@@ -14,6 +14,20 @@ const BOOKS_BY_GENRE = gql`
   }
 `;
 
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    published
+    author {
+      name
+      born
+      id
+    }
+    id
+    genres
+  }
+`;
+
 const ALL_GENRES = gql`
   query {
     allGenres
@@ -80,6 +94,16 @@ const LOGIN = gql`
   }
 `;
 
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+
+  ${BOOK_DETAILS}
+`;
+
 export {
   BOOKS_BY_GENRE,
   ALL_GENRES,
@@ -87,5 +111,6 @@ export {
   CREATE_BOOK,
   UPDATE_AUTHOR,
   LOGIN,
-  USER
+  USER,
+  BOOK_ADDED
 };

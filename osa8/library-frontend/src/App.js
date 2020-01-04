@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation, useApolloClient } from "@apollo/react-hooks";
+import {
+  useQuery,
+  useMutation,
+  useApolloClient,
+  useSubscription
+} from "@apollo/react-hooks";
 
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
-import { ALL_AUTHORS, LOGIN, USER } from "./graphql";
+import { ALL_AUTHORS, LOGIN, USER, BOOK_ADDED } from "./graphql";
 import Recommend from "./components/Recommend";
 
 const App = () => {
@@ -35,6 +40,13 @@ const App = () => {
   const user = useQuery(USER);
   const authors = useQuery(ALL_AUTHORS);
   const [login] = useMutation(LOGIN, { onError: handleError });
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(
+        `A new book ${subscriptionData.data.bookAdded.title} has been added to library collection`
+      );
+    }
+  });
 
   const errorNotification = () =>
     errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>;
