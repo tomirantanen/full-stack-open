@@ -22,6 +22,7 @@ const Login = ({ show, login, setToken }) => {
     }
     setUsername("");
     setPassword("");
+    window.location.reload();
   };
 
   return (

@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { uniq, flatten } from "lodash";
+import BooksTable from "./BooksTable";
 
 const Books = ({ show, books }) => {
+  const [genre, setGenre] = useState("");
   if (!show) {
     return null;
   }
+
+  const genres = () =>
+    uniq(flatten(books.data.allBooks.map(book => book.genres)));
+
+  const visibleBooks = genre
+    ? books.data.allBooks.filter(book => book.genres.includes(genre))
+    : books.data.allBooks;
 
   return (
     <div>
@@ -12,22 +22,22 @@ const Books = ({ show, books }) => {
       {books.loading ? (
         <p>Loading books...</p>
       ) : (
-        <table>
-          <tbody>
-            <tr>
-              <th></th>
-              <th>Author</th>
-              <th>Published</th>
-            </tr>
-            {books.data.allBooks.map(book => (
-              <tr key={book.title}>
-                <td>{book.title}</td>
-                <td>{book.author.name}</td>
-                <td>{book.published}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <>
+          {genre ? (
+            <p>
+              In genre <b>{genre}</b>
+            </p>
+          ) : (
+            <p>In all genres</p>
+          )}
+          <BooksTable books={visibleBooks} />
+          {genres().map(genre => (
+            <button onClick={() => setGenre(genre)} key={genre}>
+              {genre}
+            </button>
+          ))}
+          <button onClick={() => setGenre("")}>All genres</button>
+        </>
       )}
     </div>
   );

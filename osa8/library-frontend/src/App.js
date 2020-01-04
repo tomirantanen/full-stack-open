@@ -5,7 +5,8 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
-import { ALL_AUTHORS, ALL_BOOKS, LOGIN } from "./graphql";
+import { ALL_AUTHORS, ALL_BOOKS, LOGIN, USER } from "./graphql";
+import Recommend from "./components/Recommend";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -28,8 +29,10 @@ const App = () => {
     setToken(null);
     localStorage.clear();
     client.resetStore();
+    window.location.reload();
   };
 
+  const user = useQuery(USER);
   const books = useQuery(ALL_BOOKS);
   const authors = useQuery(ALL_AUTHORS);
   const [login] = useMutation(LOGIN, { onError: handleError });
@@ -45,6 +48,7 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage("add")}>Add book</button>
+            <button onClick={() => setPage("recommend")}>Recommend</button>
             <button onClick={logout}>Logout</button>
           </>
         ) : (
@@ -58,12 +62,18 @@ const App = () => {
         show={page === "authors"}
       />
       <Books books={books} show={page === "books"} />
-      <NewBook show={page === "add"} />
-      <Login
-        login={login}
-        setToken={token => setToken(token)}
-        show={page === "login"}
-      />
+      {token ? (
+        <>
+          <NewBook show={page === "add"} />
+          <Recommend user={user} books={books} show={page === "recommend"} />
+        </>
+      ) : (
+        <Login
+          login={login}
+          setToken={token => setToken(token)}
+          show={page === "login"}
+        />
+      )}
     </div>
   );
 };
