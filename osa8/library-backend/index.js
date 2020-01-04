@@ -1,9 +1,11 @@
 const {
   ApolloServer,
   UserInputError,
-  AuthenticationError
+  AuthenticationError,
+  PubSub
 } = require("apollo-server");
 const jwt = require("jsonwebtoken");
+const pubsub = new PubSub();
 
 const config = require("./utils/config");
 const Book = require("./models/book");
@@ -43,7 +45,9 @@ const resolvers = {
       if (author) {
         const book = new Book({ ...args, author });
         try {
-          return await book.save();
+          const savedBook = await book.save();
+          pubsub.publish("BOOK_ADDED", { bookAdded: savedBook });
+          return savedBook;
         } catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args
@@ -54,7 +58,9 @@ const resolvers = {
         try {
           const savedAuthor = await newAuthor.save();
           const book = new Book({ ...args, author: savedAuthor });
-          return await book.save();
+          const savedBook = await book.save();
+          pubsub.publish("BOOK_ADDED", { bookAdded: savedBook });
+          return savedBook;
         } catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args
@@ -94,6 +100,11 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, config.JWT_SECRET) };
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
+    }
   }
 };
 
@@ -110,6 +121,7 @@ const server = new ApolloServer({
   }
 });
 
-server.listen({ port: config.PORT }).then(({ url }) => {
+server.listen({ port: config.PORT }).then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });
